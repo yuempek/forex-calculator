@@ -1,0 +1,340 @@
+<html>
+    <head>
+         <meta charset="UTF-8">
+        <style>
+            div.col{
+                display:block;
+                width:50%;
+                margin: 5px;
+            }
+            
+            div.row{
+                display: flex;
+                margin: 0;
+                padding: 0;
+            }
+            
+            div.table{
+                width: 500px;
+            }
+            
+            select {
+                width: 100%;
+            }
+            
+            xspan {
+                display: block;
+                width: 100%;
+                height: 100%;
+            }
+
+            input {
+                width: 100%;
+            }
+        </style>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W8GRXLRGM2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-W8GRXLRGM2');
+</script>
+    </head>
+    <body>
+        <div class="table">
+            <div class="row">
+                <div class="col">Yatırım sembolü</div>
+                <div class="col"><select id="input_pair" onchange="inputPairChanged(this)">
+                    <option value="AUD/CAD">AUDCAD</option><option value="AUD/CHF">AUDCHF</option><option value="AUD/JPY">AUDJPY</option><option value="AUD/NZD">AUDNZD</option>
+                    <option value="AUD/USD">AUDUSD</option><option value="CAD/CHF">CADCHF</option><option value="CAD/JPY">CADJPY</option><option value="CHF/JPY">CHFJPY</option>
+                    <option value="EUR/AUD">EURAUD</option><option value="EUR/CAD">EURCAD</option><option value="EUR/CHF">EURCHF</option><option value="EUR/DKK">EURDKK</option>
+                    <option value="EUR/GBP">EURGBP</option><option value="EUR/HKD">EURHKD</option><option value="EUR/JPY">EURJPY</option><option value="EUR/NOK">EURNOK</option>
+                    <option value="EUR/NZD">EURNZD</option><option value="EUR/PLN">EURPLN</option><option value="EUR/SEK">EURSEK</option><option value="EUR/TRY" selected="selected">EURTRY</option>
+                    <option value="EUR/USD">EURUSD</option><option value="GBP/AUD">GBPAUD</option><option value="GBP/CAD">GBPCAD</option><option value="GBP/CHF">GBPCHF</option>
+                    <option value="GBP/DKK">GBPDKK</option><option value="GBP/JPY">GBPJPY</option><option value="GBP/NZD">GBPNZD</option><option value="GBP/PLN">GBPPLN</option>
+                    <option value="GBP/SEK">GBPSEK</option><option value="GBP/USD">GBPUSD</option><option value="NZD/CAD">NZDCAD</option><option value="NZD/CHF">NZDCHF</option>
+                    <option value="NZD/JPY">NZDJPY</option><option value="NZD/USD">NZDUSD</option><option value="USD/CAD">USDCAD</option><option value="USD/CHF">USDCHF</option>
+                    <option value="USD/CZK">USDCZK</option><option value="USD/DKK">USDDKK</option><option value="USD/HKD">USDHKD</option><option value="USD/HUF">USDHUF</option>
+                    <option value="USD/JPY">USDJPY</option><option value="USD/MXN">USDMXN</option><option value="USD/NOK">USDNOK</option><option value="USD/PLN">USDPLN</option>
+                    <option value="USD/SEK">USDSEK</option><option value="USD/SGD">USDSGD</option><option value="USD/TRY">USDTRY</option><option value="USD/ZAR">USDZAR</option>
+                    <option value="XAG/USD">XAGUSD</option><option value="XAU/EUR">XAUEUR</option><option value="XAU/USD">XAUUSD</option></select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">Hesap bazı</div>
+                <div class="col"><select id="input_base" onchange="inputBaseChanged(this)">
+                    <option value="AUD">AUD</option><option value="CAD">CAD</option><option value="CHF">CHF</option><option value="CZK">CZK</option>
+                    <option value="DKK">DKK</option><option value="EUR">EUR</option><option value="GBP">GBP</option><option value="HKD">HKD</option>
+                    <option value="HUF">HUF</option><option value="JPY">JPY</option><option value="MXN">MXN</option><option value="NOK">NOK</option>
+                    <option value="NZD">NZD</option><option value="PLN">PLN</option><option value="SEK">SEK</option><option value="SGD">SGD</option>
+                    <option value="TRY">TRY</option><option value="USD" selected="selected">USD</option><option value="XAG">XAG</option><option value="XAU">XAU</option>
+                    <option value="ZAR">ZAR</option></select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">Yatırım yönü</div>
+                <div class="col"><select id="input_long_short" onchange="inputLongShortChanged(this)"><option value="1">Long-Buy</option><option value="-1">Short-Sell</option></select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">Trade büyüklüğü (lots): </div>
+                <div class="col"><input id="input_lot" type="text" onchange="inputLotChanged(this)" value="1.00" /></div>
+            </div>
+            <div class="row">
+                <div class="col"><span id="output_lot"></span><span> lot alınan döviz</span></div>
+                <div class="col"><span id="output_stock_parity"></span></div>
+            </div>
+            <div class="row" id="parityRow">
+                <div class="col"><span id="output_high_base_pair"></span> paritesi</div>
+                <div class="col"><input id="input_parity" type="text" onchange="inputParityChanged(this)" /></div>
+            </div>
+            <div class="row">
+                <div class="col">Alınan dövizin baz birim karşılığı</div>
+                <div class="col"><span id="output_margin"></span></div>
+            </div>
+            <div class="row">
+                <div class="col">İlk fiyat</div>
+                <div class="col"><input id="input_first" type="text" onchange="inputFirstChanged(this)"/></div>
+            </div>
+            <div class="row">
+                <div class="col">Son fiyat</div>
+                <div class="col"><input id="input_last" type="text" onchange="inputLastChanged(this)"/></div>
+            </div>
+            <div class="row">
+                <div class="col">Fark (puan):</div>
+                <div class="col"><span id="output_points"></span></div>
+            </div>
+            <div class="row">
+                <div class="col">KarZarar (<span id="output_pairLow"></span>):</div>
+                <div class="col"><span id="output_profit"></span></div>
+            </div>
+            <div class="row">
+                <div class="col">KarZarar baz karşılığı (<span id="output_base"></span>):</div>
+                <div class="col"><span id="output_profit_in_base"></span></div>
+            </div>
+            <div class="row">
+                <div class="col">Swap</div>
+                <div class="col"><input id="input_swap" type="text" onchange="inputSwapChanged(this)"/></div>
+            </div>
+            <div class="row">
+                <div class="col">Süre (Gün)</div>
+                <div class="col"><input id="input_duration" type="text" onchange="inputDurationChanged(this)"/></div>
+            </div>
+            <div class="row">
+                <div class="col">Swap maliyeti (<span id="output_pairLow2"></span>):</div>
+                <div class="col"><span id="output_swap_cost"></span></div>
+            </div>
+            <div class="row">
+                <div class="col">Swap maliyeti baz karşılığı (<span id="output_base2"></span>):</div>
+                <div class="col"><span id="output_swap_cost_in_base"></span></div>
+            </div>
+            
+        </div>
+        
+        
+        <script>
+            var base="USD", pair=["EUR","TRY"], lot=1.00, first = 1.00, last = 1.00, point = 0, parity = 0, longshort = 1, swap = 0, duration = 0;
+            
+            function inputBaseChanged(obj){
+                changeBase(obj.value);
+            }
+
+            function inputFirstChanged(obj){
+                changeFirst(parseFloat(obj.value));
+            }
+
+            function inputLastChanged(obj){
+                changeLast(parseFloat(obj.value));
+            }
+
+            function inputLongShortChanged(obj){
+                changeLongShort(parseFloat(obj.value));
+            }
+
+            function inputSwapChanged(obj){
+                changeSwap(parseFloat(obj.value));
+            }
+
+            function inputDurationChanged(obj){
+                changeDuration(parseFloat(obj.value));
+            }
+
+            function changeSwap(s){
+                swap = s;
+                updateOutputSwapCost();
+                updateOutputSwapCostInBase();
+                
+                changeDuration(Math.abs(point/swap));
+                updateInputDuration();
+            }
+            
+            function changeDuration(d){
+                duration = d;
+                updateOutputSwapCost();
+                updateOutputSwapCostInBase();
+            }
+            
+            function changeLongShort(ls){
+                longshort = ls;
+                updateOutputProfit();
+                updateOutputProfitInBase();
+            }
+            
+            function changeFirst(f){
+                first = f;
+                changePoint();
+            }
+            
+            function changeLast(l){
+                last = l;
+                changePoint();
+                checkParity();
+                updateOutputProfitInBase();
+                updateOutputSwapCostInBase();
+            }
+
+            function changePoint(l){
+                point = Math.round(100000 * (last - first));
+                updateOutputPoint();
+                updateOutputProfit();
+                updateOutputProfitInBase();
+            }
+            
+            function changeBase(b){
+                base = b;
+                updateOutputHighBasePair();
+                updateOutputMargin();
+                updateOutputBase();
+                checkParity();
+            }
+            
+            function inputPairChanged(obj){
+                changePair(obj.value);
+            }
+            
+            function checkParity(){
+                switch(base) {
+                  case pair[0]:
+                    changeParity(1);
+                    hideParity(true);
+                    break;
+                  case pair[1]:
+                    changeParity(last);
+                    hideParity(true);
+                    break;
+                  default:
+                    hideParity(false);
+                }
+            }
+            
+            function changePair(p){
+                pair = p.split("/");
+                updateOutputHighBasePair();
+                updateOutputStockparity();
+                updateOutputPairLow();
+                checkParity();
+            }
+            
+            function inputLotChanged(obj){
+                changeLot(parseFloat(obj.value));
+            }
+            
+            function changeLot(l){
+                lot = l;
+                updateOutputLot();
+                updateOutputMargin();
+                updateOutputProfit();
+                updateOutputProfitInBase();
+                updateOutputSwapCost();
+                updateOutputSwapCostInBase();
+            }
+            
+            function inputParityChanged(obj){
+                changeParity(obj.value);
+            }
+            
+            function changeParity(p){
+                parity = p;
+                updateOutputMargin();
+                updateOutputProfitInBase();
+                updateOutputSwapCostInBase();
+            }
+            
+            function updateInputDuration(){
+                document.getElementById("input_duration").value = duration;
+            }
+            
+            function updateOutputHighBasePair(){
+                document.getElementById("output_high_base_pair").innerHTML =  pair[0] + base;
+            }
+            
+            function updateOutputLot(){
+                document.getElementById("output_lot").innerHTML =  lot;
+            }
+            
+            function updateOutputStockparity(){
+                document.getElementById("output_stock_parity").innerHTML =  pair[0];
+            }
+            
+            function updateOutputMargin(){
+                document.getElementById("output_margin").innerHTML =  100000*lot*parity + " " + base;
+            }
+            
+            function updateOutputPoint(){
+                document.getElementById("output_points").innerHTML =  point;
+            }
+            
+            function updateOutputPairLow(){
+                document.getElementById("output_pairLow").innerHTML =  pair[1];
+                document.getElementById("output_pairLow2").innerHTML =  pair[1];
+            }
+            
+            function updateOutputProfit(){
+                document.getElementById("output_profit").innerHTML = (longshort*lot*point).toFixed(2);
+            }
+            
+            function updateOutputProfitInBase(){
+                document.getElementById("output_profit_in_base").innerHTML = (longshort*lot*point/(last/parity)).toFixed(2) ;
+            }
+            
+            function updateOutputSwapCost(){
+                document.getElementById("output_swap_cost").innerHTML = (swap*lot*duration).toFixed(2);
+            }
+            
+            function updateOutputSwapCostInBase(){
+                document.getElementById("output_swap_cost_in_base").innerHTML = (swap*lot*duration/(last/parity)).toFixed(2);;
+            }
+            
+            function updateOutputBase(){
+                document.getElementById("output_base").innerHTML = base;
+                document.getElementById("output_base2").innerHTML = base;
+            }
+                       
+            function hideParity(tf){
+                if(tf)
+                    document.getElementById("parityRow").style = "display:none;";
+                else
+                    document.getElementById("parityRow").style = "";
+                    
+            }
+            
+            
+            (function updateOutputAll(){
+                updateOutputHighBasePair();
+                updateOutputLot();
+                updateOutputStockparity();
+                updateOutputMargin();
+                updateOutputPoint();
+                updateOutputPairLow();
+                updateOutputProfit();
+                updateOutputProfitInBase();
+                updateOutputSwapCost();
+                updateOutputSwapCostInBase();
+                updateOutputBase();
+            })();
+            
+        </script>
+    </body>
+</html>
